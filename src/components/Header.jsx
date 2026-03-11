@@ -4,35 +4,35 @@ import newAustin from "../assets/newAustin.jpg";
 const NAV_LINKS = ["Home", "About Us", "Events", "Media", "Notices", "Contact"];
 
 export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("Home");
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [active, setActive] = useState("Home");
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 30);
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
-  // close menu on resize to desktop
-  useEffect(() => {
-    const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false); };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+    // close menu on resize to desktop
+    useEffect(() => {
+        const onResize = () => { if (window.innerWidth >= 768) setMenuOpen(false); };
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, []);
 
-  const scrollTo = (label) => {
-    setActive(label);
-    setMenuOpen(false);
-    const id = label.toLowerCase().replace(/\s+/g, "-");
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-    else window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    const scrollTo = (label) => {
+        setActive(label);
+        setMenuOpen(false);
+        const id = label.toLowerCase().replace(/\s+/g, "-");
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
-  return (
-    <>
-      <style>{`
+    return (
+        <>
+            <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@400;500;600;700;800&display=swap');
         * { box-sizing: border-box; }
 
@@ -52,8 +52,8 @@ export default function Header() {
         /* Glass morphism when scrolled */
         .hdr.scrolled {
           background: rgba(255,255,255,0.92);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          //backdrop-filter: blur(16px);
+        //   -webkit-backdrop-filter: blur(16px);
           box-shadow: 0 2px 24px rgba(26,58,42,0.1);
           border-bottom: 1px solid rgba(201,168,76,0.12);
         }
@@ -247,111 +247,112 @@ export default function Header() {
         }
       `}</style>
 
-      {/* MOBILE FULL-SCREEN MENU */}
-      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-        <button className="mob-close" onClick={() => setMenuOpen(false)}>
-          <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
+            {/* MOBILE FULL-SCREEN MENU */}
+            <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+                <button className="mob-close" onClick={() => setMenuOpen(false)}>
+                    <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
 
-        {/* decorative script */}
-        <div style={{ fontFamily:"'Dancing Script',cursive", fontSize:16, color:"#c9a84c", letterSpacing:1, marginBottom:8, opacity: menuOpen ? 1 : 0, transition:"opacity 0.3s" }}>
-          Chittilappilly Kunnath
-        </div>
+                {/* decorative script */}
+                <div style={{ fontFamily: "'Dancing Script',cursive", fontSize: 16, color: "#c9a84c", letterSpacing: 1, marginBottom: 8, opacity: menuOpen ? 1 : 0, transition: "opacity 0.3s" }}>
+                    Chittilappilly Kunnath
+                </div>
 
-        {NAV_LINKS.map((link) => (
-          <button
-            key={link}
-            className={`mob-link ${active === link ? "active" : ""}`}
-            onClick={() => scrollTo(link)}
-          >
-            {link}
-          </button>
-        ))}
+                {NAV_LINKS.map((link) => (
+                    <button
+                        key={link}
+                        className={`mob-link ${active === link ? "active" : ""}`}
+                        onClick={() => scrollTo(link)}
+                    >
+                        {link}
+                    </button>
+                ))}
 
-        <button className="mob-book" onClick={() => scrollTo("Contact")}>
-          Book the Hall
-          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* MAIN HEADER */}
-      <header className={`hdr ${scrolled ? "scrolled" : "top"}`}>
-        <div className="hdr-inner">
-
-          {/* LOGO */}
-          <div className="logo" onClick={() => scrollTo("Home")}>
-            <div className="logo-emblem">
-              <img
-                src={newAustin}
-                alt="logo"
-                onError={e => {
-                  e.target.style.display = "none";
-                  e.target.parentNode.innerHTML = `<span style="font-family:'Dancing Script',cursive;font-size:18px;color:#e8c97a;font-weight:600">CK</span>`;
-                }}
-              />
+                <button className="mob-book" onClick={() => scrollTo("Contact")}>
+                    Book the Hall
+                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </button>
             </div>
-            <div>
-              <div className="logo-text">Chittilappilly Kunnath</div>
-              <span className="logo-sub">Family Association</span>
-            </div>
-          </div>
 
-          {/* DESKTOP NAV */}
-          <nav className="nav-desktop">
-            {NAV_LINKS.map((link) => (
-              <button
-                key={link}
-                className={`nav-btn ${active === link ? "active" : ""}`}
-                onClick={() => scrollTo(link)}
-              >
-                <span className="nav-dot"/>
-                {link}
-              </button>
-            ))}
-          </nav>
+            {/* MAIN HEADER */}
+            {/* <header className={`hdr ${scrolled ? "scrolled" : "top"}`}> */}
+            <header className="hdr scrolled">
+                <div className="hdr-inner">
 
-          {/* BOOK CTA */}
-          <button className="book-btn" onClick={() => scrollTo("Contact")}>
-            Book the Hall
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </button>
+                    {/* LOGO */}
+                    <div className="logo" onClick={() => scrollTo("Home")}>
+                        <div className="logo-emblem">
+                            <img
+                                src={newAustin}
+                                alt="logo"
+                                onError={e => {
+                                    e.target.style.display = "none";
+                                    e.target.parentNode.innerHTML = `<span style="font-family:'Dancing Script',cursive;font-size:18px;color:#e8c97a;font-weight:600">CK</span>`;
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <div className="logo-text">Chittilappilly Kunnath</div>
+                            <span className="logo-sub">Family Association</span>
+                        </div>
+                    </div>
 
-          {/* BURGER */}
-          <button
-            className={`burger ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span/><span/><span/>
-          </button>
+                    {/* DESKTOP NAV */}
+                    <nav className="nav-desktop">
+                        {NAV_LINKS.map((link) => (
+                            <button
+                                key={link}
+                                className={`nav-btn ${active === link ? "active" : ""}`}
+                                onClick={() => scrollTo(link)}
+                            >
+                                <span className="nav-dot" />
+                                {link}
+                            </button>
+                        ))}
+                    </nav>
 
-        </div>
+                    {/* BOOK CTA */}
+                    <button className="book-btn" onClick={() => scrollTo("Contact")}>
+                        Book the Hall
+                        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
 
-        {/* scroll progress bar */}
-        {scrolled && (
-          <ScrollBar/>
-        )}
-      </header>
-    </>
-  );
+                    {/* BURGER */}
+                    <button
+                        className={`burger ${menuOpen ? "open" : ""}`}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <span /><span /><span />
+                    </button>
+
+                </div>
+
+                {/* scroll progress bar */}
+                {scrolled && (
+                    <ScrollBar />
+                )}
+            </header>
+        </>
+    );
 }
 
 function ScrollBar() {
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    const update = () => {
-      const el = document.documentElement;
-      const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
-      setWidth(pct);
-    };
-    window.addEventListener("scroll", update);
-    return () => window.removeEventListener("scroll", update);
-  }, []);
-  return <div className="scroll-bar" style={{ width: `${width}%` }}/>;
+    const [width, setWidth] = useState(0);
+    useEffect(() => {
+        const update = () => {
+            const el = document.documentElement;
+            const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+            setWidth(pct);
+        };
+        window.addEventListener("scroll", update);
+        return () => window.removeEventListener("scroll", update);
+    }, []);
+    return <div className="scroll-bar" style={{ width: `${width}%` }} />;
 }
