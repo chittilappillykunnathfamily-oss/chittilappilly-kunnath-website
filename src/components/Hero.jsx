@@ -361,7 +361,7 @@ const Hero = () => {
                         marginBottom: 28,
                         textShadow: '0 2px 30px rgba(0,0,0,0.5)',
                     }}>
-                        Chittilappilly Kunnath<br />Tharavattuyogam
+                        Chittilappilly <br />Tharavattuyogam
                     </h1>
 
                     {/* Divider */}
