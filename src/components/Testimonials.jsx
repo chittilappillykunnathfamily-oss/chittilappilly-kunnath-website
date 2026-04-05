@@ -1,84 +1,231 @@
-import React from 'react';
-import { Star, Quote } from 'lucide-react';
+import { useState, useEffect } from "react";
 
-const testimonials = [
-    {
-        quote: "Our backyard has completely transformed into a relaxing green escape. The team's creativity and attention to detail made all the difference.",
-        name: 'Paul Richards',
-        location: 'California, USA',
-        rating: 5,
-    },
-    {
-        quote: "Greenora turned our overgrown patch into a stunning front garden. Professional, punctual, and truly passionate about their work.",
-        name: 'Sarah Mitchell',
-        location: 'Texas, USA',
-        rating: 5,
-    },
-    {
-        quote: "Incredible service from start to finish. They listened to exactly what we wanted and delivered beyond our expectations. Highly recommend!",
-        name: 'James Turner',
-        location: 'Oregon, USA',
-        rating: 5,
-    },
-];
+export default function ImageSlideshow() {
+    const [slides, setSlides] = useState([]);
+    const [current, setCurrent] = useState(0);
 
-const Testimonials = () => {
+    useEffect(() => {
+  const fetchImages = async () => {
+    try {
+      const res = await fetch(
+        "https://chittilappillykunnath.com/wp-json/wp/v2/pages/2297"
+      );
+      const data = await res.json();
+
+      // 👇 ADD HERE
+      console.log("FULL DATA 👉", data);
+      console.log("ACF 👉", data.acf);
+
+      const ids = [data.acf.image_1, data.acf.image2].filter(Boolean);
+
+      // 👇 ADD HERE
+      console.log("IDS 👉", ids);
+
+      const images = await Promise.all(
+        ids.map(async (id) => {
+          const imgRes = await fetch(
+            `https://chittilappillykunnath.com/wp-json/wp/v2/media/${id}`
+          );
+          const imgData = await imgRes.json();
+
+          return {
+            id,
+            url: imgData.source_url,
+          };
+        })
+      );
+
+      // 👇 ADD HERE
+      console.log("IMAGES 👉", images);
+
+      setSlides(images);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchImages();
+}, []);
+
+    const next = () => {
+        setCurrent((prev) => (prev + 1) % slides.length);
+    };
+
+    const prev = () => {
+        setCurrent((prev) =>
+            prev === 0 ? slides.length - 1 : prev - 1
+        );
+    };
+
+    if (slides.length === 0) return <p style={{ textAlign: 'center' }}>Loading...</p>;
+
+    const slide = slides[current];
+
     return (
-        <section id="testimonial" className="py-24 md:py-32" style={{ background: 'var(--green-xpale)' }}>
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Header */}
-                <div className="text-center max-w-2xl mx-auto mb-16">
-                    <span className="section-label">(testimonials)</span>
-                    <h2 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: 'var(--green-dark)' }}>
-                        Hear From Our{' '}
-                        <span style={{ color: 'var(--green-primary)', fontStyle: 'italic' }}>Happy Customers</span>
-                    </h2>
+        <>
+            <style>{`
+        .wrapper {
+          width: 100%;
+          max-width: 1100px;
+          margin: 40px auto;
+          padding: 0 16px;
+        }
+
+        .frame {
+          position: relative;
+          width: 100%;
+          height: 420px;
+          border-radius: 20px;
+          overflow: hidden;
+          background: #000;
+        }
+
+        .bg {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          transition: opacity 0.5s ease;
+        }
+
+        .overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
+        .content {
+          position: absolute;
+          bottom: 20px;
+          left: 20px;
+          color: white;
+        }
+
+        .content h2 {
+          font-size: 28px;
+          margin-bottom: 5px;
+        }
+
+        .content p {
+          font-size: 14px;
+          opacity: 0.8;
+        }
+
+        /* Arrows */
+        .nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          background: rgba(0,0,0,0.5);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 5;
+        }
+
+        .left { left: 15px; }
+        .right { right: 15px; }
+
+        .nav:hover {
+          background: rgba(0,0,0,0.7);
+        }
+
+        /* Thumbnails */
+        .thumbs {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-top: 12px;
+        }
+
+        .thumb {
+          width: 60px;
+          height: 40px;
+          border-radius: 6px;
+          overflow: hidden;
+          cursor: pointer;
+          border: 2px solid transparent;
+        }
+
+        .thumb.active {
+          border-color: #fff;
+        }
+
+        .thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        /* Tablet */
+        @media (max-width: 900px) {
+          .frame {
+            height: 320px;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+          .frame {
+            height: 240px;
+            border-radius: 12px;
+          }
+
+          .nav {
+            width: 32px;
+            height: 32px;
+          }
+
+          .left { left: 8px; }
+          .right { right: 8px; }
+
+          .content h2 {
+            font-size: 18px;
+          }
+
+          .content p {
+            font-size: 12px;
+          }
+        }
+      `}</style>
+
+            <div className="wrapper">
+                <div className="frame">
+                    <div
+                        className="bg"
+                        style={{ backgroundImage: `url(${slide.url})` }}
+                    />
+
+                    <div className="overlay" />
+
+                    <div className="content">
+                        <h2>{slide.title}</h2>
+                        <p>From WordPress CMS</p>
+                    </div>
+
+                    {/* Arrows */}
+                    <div className="nav left" onClick={prev}>‹</div>
+                    <div className="nav right" onClick={next}>›</div>
                 </div>
 
-                {/* Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-                    {testimonials.map((t, i) => (
+                {/* Thumbnails */}
+                <div className="thumbs">
+                    {slides.map((s, i) => (
                         <div
-                            key={i}
-                            className="card-hover rounded-3xl p-8 flex flex-col"
-                            style={{ background: 'white', border: '1px solid var(--green-pale)' }}
+                            key={s.id}
+                            className={`thumb ${i === current ? "active" : ""}`}
+                            onClick={() => setCurrent(i)}
                         >
-                            {/* Quote icon */}
-                            <div className="mb-5">
-                                <Quote size={32} style={{ color: 'var(--green-light)' }} />
-                            </div>
-
-                            {/* Stars */}
-                            <div className="flex gap-1 mb-5">
-                                {[...Array(t.rating)].map((_, j) => (
-                                    <Star key={j} size={16} fill="var(--green-accent)" color="var(--green-accent)" />
-                                ))}
-                            </div>
-
-                            {/* Quote text */}
-                            <p className="text-base leading-relaxed flex-1 mb-8" style={{ color: 'var(--text-mid)', fontStyle: 'italic' }}>
-                                "{t.quote}"
-                            </p>
-
-                            {/* Author */}
-                            <div className="flex items-center gap-3" style={{ borderTop: '1px solid var(--green-pale)', paddingTop: '1.25rem' }}>
-                                <div
-                                    className="w-11 h-11 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0"
-                                    style={{ background: 'linear-gradient(135deg, var(--green-primary), var(--green-accent))' }}
-                                >
-                                    {t.name[0]}
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-sm" style={{ color: 'var(--green-dark)' }}>{t.name}</div>
-                                    <div className="text-xs" style={{ color: 'var(--text-light)' }}>{t.location}</div>
-                                </div>
-                            </div>
+                            <img src={s.url} alt="" />
                         </div>
                     ))}
                 </div>
             </div>
-        </section>
+        </>
     );
-};
-
-export default Testimonials;
+}

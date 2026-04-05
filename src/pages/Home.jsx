@@ -20,11 +20,11 @@ const Home = () => {
                 <Services />
                 <WhyUs />
                 {/* //<Works /> */}
-                {/* <Testimonials /> */}
+                <Testimonials /> 
             
                 <Contact />
             </main>
-            {/* <Footer /> */}
+             <Footer />
         </>
     );
 };

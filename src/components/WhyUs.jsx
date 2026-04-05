@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const aboutItems = [
   {
@@ -29,10 +30,11 @@ const aboutItems = [
 
 export default function AboutSection() {
   const [hovered, setHovered] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div
-      id="about-us"
+      id="why-us"
       style={{
         background: "#fff",
         fontFamily: "'Open Sans', sans-serif",
@@ -197,6 +199,7 @@ export default function AboutSection() {
 
       <div className="about-wrap">
 
+
         {/* Header */}
         <div className="about-header">
           <span className="about-script">About Us</span>
@@ -245,15 +248,19 @@ export default function AboutSection() {
           <p className="banner-quote">
             "കുടുംബം ദൈവിക സ്വഭാവമുള്ളതാണെന്നും അത് ദൈവത്താൽ നിയോഗിക്കപ്പെട്ടതാണെന്നും ഞങ്ങൾ വിശ്വസിക്കുന്നു."
           </p>
-          <a href="/about" className="banner-btn">
+          <button
+            className="banner-btn"
+            onClick={() => navigate("/ourstory")}
+          >
             Explore Our Story
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </button>
+
         </div>
 
       </div>
-    </div>
+    </div >
   );
 }
